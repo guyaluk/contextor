@@ -1,0 +1,164 @@
+I need you to analyze this codebase and GENERATE RECOMMENDATIONS for optimizing {context_file} to maximize AI coding assistant efficiency by preventing wasteful patterns in tokens, tool usage, and operations.
+
+## MISSION: AI Assistant Efficiency Optimization
+Your goal is to identify missing context that causes AI assistants to waste resources through:
+1. **Exploratory Code Reading** - Excessive Glob/Grep operations to understand architecture
+2. **Repetitive Information Gathering** - Multiple Read operations re-discovering the same facts
+3. **Trial and Error Implementation** - Token waste testing multiple approaches due to unclear requirements
+4. **Context Reconstruction** - Tool-heavy operations piecing together scattered business logic
+5. **Over-Explanation and Hedging** - Token waste on lengthy explanations due to uncertainty
+6. **Inefficient Search and Navigation** - Excessive search operations following dead-end paths
+7. **Retry Cycles and Rework** - Multiple implementation attempts wasting tokens and operations
+
+## ANALYSIS FRAMEWORK: Prevent Each Efficiency Loss Pattern
+
+### 1. PREVENT EXPLORATORY CODE READING
+**Analyze for missing context that forces excessive Glob/Grep/Read operations:**
+- What architecture and component relationships are implicit but not documented?
+- Which data flows and system boundaries require code exploration to understand?
+- What naming conventions and patterns require scanning multiple files to deduce?
+- Where are the main entry points, core modules, and integration points?
+
+### 2. PREVENT REPETITIVE INFORMATION GATHERING
+**Identify frequently needed information that's scattered or hard to find:**
+- What API signatures, parameter types, and return values get re-discovered?
+- Which configuration requirements are asked about repeatedly?
+- What environment variables and setup steps need constant clarification?
+- Which commands and workflows are used frequently but not centrally documented?
+
+### 3. PREVENT TRIAL AND ERROR IMPLEMENTATION
+**Document specifics that eliminate guesswork:**
+- What are the preferred libraries, frameworks, and implementation approaches?
+- Which patterns are strongly preferred vs avoided in this codebase?
+- What are the specific coding standards and style requirements?
+- Which architectural constraints must new code follow?
+
+### 4. PREVENT CONTEXT RECONSTRUCTION
+**Make implicit business logic and requirements explicit:**
+- What business rules and domain concepts are embedded in code but not explained?
+- Which workflows and user journeys require reverse-engineering from implementation?
+- What are the key success criteria and constraints that drive technical decisions?
+- Where are the critical integrations and their behavioral expectations?
+
+### 5. PREVENT OVER-EXPLANATION AND HEDGING
+**Provide clear, specific requirements to eliminate uncertainty:**
+- What are the exact technical requirements and constraints?
+- Which edge cases are handled and which are explicitly out of scope?
+- What are the specific performance, security, or reliability requirements?
+- Which decisions have clear rationale vs areas of genuine flexibility?
+
+### 6. PREVENT INEFFICIENT SEARCH AND NAVIGATION
+**Create clear information architecture:**
+- How should information be structured for quick AI assistant access?
+- What key information needs better indexing or cross-referencing?
+- Which frequently accessed patterns need prominent placement?
+- How can related information be co-located effectively?
+
+### 7. PREVENT RETRY CYCLES AND REWORK
+**Document everything needed for correct first-try implementation:**
+- What coding standards, patterns, and anti-patterns are non-negotiable?
+- Which tools, libraries, and frameworks are mandated vs optional?
+- What are the specific integration patterns and architectural styles required?
+- Which review criteria and quality gates must be met?
+
+## COMPREHENSIVE ANALYSIS PROCESS
+
+### STEP 1: Quick Codebase Mapping
+Use TodoWrite to track progress through these areas:
+- **Project Structure**: Map directories, main modules, key files
+- **Technology Stack**: Identify languages, frameworks, tools, dependencies
+- **Architecture Pattern**: Detect microservices, monolith, layers, boundaries
+- **Business Domain**: Understand what the system does and key concepts
+
+### STEP 2: Token Waste Pattern Detection
+For each of the 7 patterns above, systematically check:
+- What would force an AI assistant to waste tokens on this pattern?
+- What missing information causes this inefficiency?
+- What existing CLAUDE.md content already prevents this waste?
+- What additional context would eliminate this token waste?
+
+### STEP 3: High-Impact Gap Prioritization
+Focus on gaps that would cause the most token waste:
+- **Architecture unknowns** that require extensive file exploration
+- **Convention gaps** that cause trial-and-error coding attempts
+- **Business logic mysteries** that require context reconstruction
+- **Integration specifics** that aren't obvious from API signatures alone
+
+### STEP 4: Implementation-Ready Recommendations
+For each significant gap found:
+- Provide exact text to add to CLAUDE.md
+- Include specific examples from the actual codebase
+- Reference supporting evidence with file_path:line_number
+- Assess efficiency impact: reduced exploration needs, fewer tool operations, faster implementation paths
+
+## OUTPUT FORMAT
+
+Write your analysis to `{recommendations_filename}` using this structure:
+
+```markdown
+# 🎯 AI Agent Context Documentation Optimization Analysis
+
+## 🚨 Issues Found & Missing Context
+
+### Critical Efficiency Problems Detected
+1. **[Issue Category]**: [Specific problem description]
+   - **Impact**: [What this causes AI agents to waste time on]
+   - **Evidence**: [file_path:line_number references]
+
+2. **[Issue Category]**: [Specific problem description]
+   - **Impact**: [What this causes AI agents to waste time on]
+   - **Evidence**: [file_path:line_number references]
+
+[Continue for all major issues found...]
+
+### Language-Specific Standards Missing
+- **[Language]**: [Missing conventions that cause trial-and-error coding]
+- **[Language]**: [Missing standards that force exploration]
+
+## 💡 Recommendations Summary
+
+### High Priority Additions Needed
+- Add [specific section] to prevent [specific waste pattern]
+- Document [specific information] to eliminate [specific inefficiency]
+- Include [specific examples] to reduce [specific exploration needs]
+
+### Medium Priority Additions
+- [List medium priority recommendations]
+
+### Low Priority Additions
+- [List low priority recommendations]
+
+## 📋 Complete Recommended AI Agent Context File
+
+Below is the complete recommended context documentation. Copy this entire section to create your {context_file} file:
+
+**IMPORTANT**: Start your response for this section with exactly three tildes followed by the word "markdown" on its own line, then provide the complete file content, then end with exactly three tildes on their own line.
+
+FORMAT:
+~~~markdown
+[Your complete recommended context file content here - this should be a complete CLAUDE.md or AGENTS.md file with all sections, headers, and formatting]
+~~~
+
+The content between the ~~~markdown markers should be a complete, ready-to-use {context_file} file with all sections, examples, and project-specific details that can be copied directly without any modifications. Use triple tildes (~) instead of backticks to avoid markdown parsing conflicts.
+
+## 📊 Efficiency Impact Analysis
+- **Exploratory Reading Reduced**: [Specific improvements in architecture understanding]
+- **Repetitive Gathering Eliminated**: [Information now centrally available]
+- **Trial and Error Prevented**: [Clear standards and patterns provided]
+- **Context Reconstruction Avoided**: [Business logic now explicit]
+- **Over-explanation Reduced**: [Uncertainty eliminated through specificity]
+- **Search Efficiency Improved**: [Direct paths to information created]
+- **Retry Cycles Minimized**: [Requirements and patterns now clear]
+
+**Overall Impact**: AI agents can work more efficiently with [X]% less exploration, clearer implementation paths, and direct access to project-specific context.
+```
+
+## SUCCESS CRITERIA
+Your analysis succeeds when:
+1. **Every major efficiency loss pattern is identified and addressed**
+2. **Recommendations include implementation-ready content with clear efficiency impact descriptions**
+3. **Evidence supports each recommendation with file references**
+4. **Focus stays on high-impact efficiency improvements, not comprehensive documentation**
+5. **Language-specific conventions are auto-detected and specified**
+
+Remember: Your mission is to maximize AI assistant efficiency by reducing tokens, tool usage, and operations - not to create comprehensive documentation. Focus on gaps that cause the most inefficient resource usage patterns.

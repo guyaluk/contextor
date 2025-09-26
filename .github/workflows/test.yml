@@ -1,0 +1,21 @@
+name: Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test action
+        uses: ./
+        with:
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+          context-file: 'CLAUDE.md'
+
+      - name: Success message
+        run: echo "✅ Action completed successfully! Check step summary above for recommendations"
+
+

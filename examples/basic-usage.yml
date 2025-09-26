@@ -1,0 +1,34 @@
+name: Generate AI Context Recommendations
+
+# This workflow demonstrates basic usage of the AI Agent Context Optimizer action
+# It analyzes your codebase and generates optimization recommendations
+# Results are displayed directly in the GitHub Actions step summary
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      detailed_analysis:
+        description: 'Run detailed analysis'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  analyze-codebase:
+    runs-on: ubuntu-latest
+    name: Analyze Codebase for AI Context Optimization
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run AI Agent Context Optimizer
+        id: context-optimizer
+        uses: guyaluk/contextor@v0
+        with:
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+          context-file: 'CLAUDE.md'  # Choose: 'CLAUDE.md' or 'AGENTS.md'

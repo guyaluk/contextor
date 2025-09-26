@@ -1,0 +1,115 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    name: Create Release
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "major=$(echo $VERSION | cut -d. -f1)" >> $GITHUB_OUTPUT
+          echo "minor=$(echo $VERSION | cut -d. -f1-2)" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get the previous tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 ${{ steps.version.outputs.version }}^ 2>/dev/null || echo "")
+
+          if [ -n "$PREVIOUS_TAG" ]; then
+            echo "## Changes since $PREVIOUS_TAG" > CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            git log $PREVIOUS_TAG..${{ steps.version.outputs.version }} \
+              --pretty=format:"- %s (%h)" \
+              --no-merges >> CHANGELOG.md
+          else
+            echo "## Initial Release" > CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            echo "- Initial release of AI Context Optimizer GitHub Action" >> CHANGELOG.md
+          fi
+
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          cat CHANGELOG.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          release_name: Release ${{ steps.version.outputs.version }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
+
+      - name: Update major version tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Force update the major version tag
+          git tag -fa ${{ steps.version.outputs.major }} -m "Update ${{ steps.version.outputs.major }} to ${{ steps.version.outputs.version }}"
+          git push origin ${{ steps.version.outputs.major }} --force
+
+      - name: Update minor version tag
+        run: |
+          # Force update the minor version tag
+          git tag -fa ${{ steps.version.outputs.minor }} -m "Update ${{ steps.version.outputs.minor }} to ${{ steps.version.outputs.version }}"
+          git push origin ${{ steps.version.outputs.minor }} --force
+
+  test-release:
+    needs: release
+    runs-on: ubuntu-latest
+    name: Test Released Action
+
+    steps:
+      - name: Checkout action repository
+        uses: actions/checkout@v4
+
+      - name: Create test repository
+        run: |
+          mkdir test-repo
+          cd test-repo
+          git init
+          echo "# Test Repository" > README.md
+          echo "console.log('Hello World')" > index.js
+          echo '{"name": "test-repo", "version": "1.0.0"}' > package.json
+          git add .
+          git config user.name "Test User"
+          git config user.email "test@example.com"
+          git commit -m "Initial commit"
+
+      - name: Test action with released version
+        uses: guyaluk/contextor@v0
+        with:
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+          context-file: 'CLAUDE.md'
+
+      - name: Verify test results
+        run: |
+          if [ -f "AI_CONTEXT_RECOMMENDATIONS_"*.md ]; then
+            echo "✅ Release test successful - AI context recommendations generated"
+          else
+            echo "❌ Release test failed - No recommendations file found"
+            exit 1
+          fi
